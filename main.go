@@ -34,7 +34,7 @@ func main() {
  	for i, s := range strings {
 		go func(row int, stuff string) {
 			log.Printf("Sending Data Row(%d) Value(%s)\n",row, stuff)
-
+			log.Printf("WG state %v\n", wg)
 			exData := Item{
 				Title: stuff,
 				Body: stuff,
@@ -59,9 +59,9 @@ func main() {
 		wg.Wait()
 		close(results)
 	}()
+	display(results)
 
- 	display(results)
- 	
+	log.Printf("WG XXX state %v\n", wg)
 	log.Printf("Took %v",time.Now().Sub(startTime).Round(time.Microsecond).String())
 }
 
@@ -84,13 +84,13 @@ func postData(url string, payload []byte) string{
 	//request.Header.Add("Authorization", "Basic "+basicAuth(s.SnowAPIUser, s.SnowAPIPass))
 	response, err := client.Do(request)
 	if err != nil {
-		log.Fatalf("The HTTP request failed with error %s\n", err)
+		log.Fatalf("Error: The HTTP POST request failed with error %s\n", err)
+		return ""
 	} else {
 		data, _ := ioutil.ReadAll(response.Body)
+		defer response.Body.Close()
 		return("OK:" + string(data))
 	}
-	defer response.Body.Close()
-	return "nil"
 }
 
 func basicAuth(username, password string) string {
