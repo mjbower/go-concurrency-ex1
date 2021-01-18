@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -20,7 +19,7 @@ type Item struct {
 
 func main() {
 	startTime := time.Now()
-	fmt.Println("Starting")
+	log.Println("Starting")
 
 	strings := []string{"hello", "world","This, is, a, test, row",
 		"This", "is", "another", "test", "row", "my", "dude",
@@ -63,7 +62,7 @@ func main() {
 
  	display(results)
  	
-	fmt.Printf("Took %v",time.Now().Sub(startTime).Round(time.Microsecond).String())
+	log.Printf("Took %v",time.Now().Sub(startTime).Round(time.Microsecond).String())
 }
 
 func display(results chan string) {
